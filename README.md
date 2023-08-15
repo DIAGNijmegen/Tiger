@@ -9,14 +9,10 @@ Tiger is a collection of utilities for medical image analysis projects in Python
 To install the latest version, open a command line an run:
 
 ```shell script
-pip install git+https://github.com/DIAGNijmegen/msk-tiger.git@stable
+pip install git+https://github.com/DIAGNijmegen/Tiger.git@stable
 ```
 
 In the official DIAG docker base image, Tiger is already pre-installed.
-
-## Documentation
-
-The documentation can be found at https://repos.diagnijmegen.nl/doc/tiger/
 
 ## Getting started
 
