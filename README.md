@@ -1,5 +1,3 @@
-[![Tests](https://github.com/DIAGNijmegen/msk-tiger/workflows/Tests/badge.svg)](https://github.com/DIAGNijmegen/msk-tiger/actions)
-[![Build](https://github.com/DIAGNijmegen/msk-tiger/workflows/Build/badge.svg)](https://github.com/DIAGNijmegen/msk-tiger/releases)
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
 
 # Tiger
@@ -11,8 +9,6 @@ To install the latest version, open a command line an run:
 ```shell script
 pip install git+https://github.com/DIAGNijmegen/Tiger.git@stable
 ```
-
-In the official DIAG docker base image, Tiger is already pre-installed.
 
 ## Getting started
 
