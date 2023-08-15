@@ -1,0 +1,15 @@
+# Python cache
+__pycache__/
+/.coverage
+
+# PyCharm
+/.idea/
+
+# Jupyter
+.ipynb_checkpoints/
+
+# Temporary build files
+/*.egg-info/
+/build/
+/dist/
+/_docs/

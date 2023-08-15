@@ -1,0 +1,68 @@
+name: Build
+
+on:
+  push:
+    tags:
+      - '*.*.*'
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+        with:
+          lfs: true
+      - name: Determine version of the release
+        id: version_from_tag
+        run: echo ::set-output name=VERSION::${GITHUB_REF/refs\/tags\//}
+      - name: Setup python
+        uses: actions/setup-python@v3
+        with:
+          python-version: 3.8
+      - name: Install dependencies
+        run: |
+          pip install -e .[visdom,torch,tests,docs]
+          pip install wheel
+      - name: Run tests
+        run: python -m pytest tests/
+      - name: Build wheel
+        run: python setup.py bdist_wheel
+      - name: Build docs
+        env:
+          TIGER_VERSION: ${{ steps.version_from_tag.outputs.VERSION }}
+        run: |
+          mkdir ./docs-${TIGER_VERSION}
+          sphinx-build -b html ./docs ./docs-${TIGER_VERSION}
+          tar -czf docs-${TIGER_VERSION}.tar.gz docs-${TIGER_VERSION}
+      - name: Create release
+        id: create_release
+        if: ${{ success() }}
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ github.ref }}
+          release_name: Tiger ${{ steps.version_from_tag.outputs.VERSION }}
+          draft: false
+          prerelease: false
+      - name: Upload wheel
+        if: ${{ success() }}
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./dist/tiger-${{ steps.version_from_tag.outputs.VERSION }}-py3-none-any.whl
+          asset_name: tiger-${{ steps.version_from_tag.outputs.VERSION }}-py3-none-any.whl
+          asset_content_type: application/zip
+      - name: Upload docs
+        if: ${{ success() }}
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./docs-${{ steps.version_from_tag.outputs.VERSION }}.tar.gz
+          asset_name: docs-${{ steps.version_from_tag.outputs.VERSION }}.tar.gz
+          asset_content_type: application/gzip

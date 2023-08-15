@@ -1,0 +1,4 @@
+tests/resources/*.mha filter=lfs diff=lfs merge=lfs -text
+tests/resources/*.tag filter=lfs diff=lfs merge=lfs -text
+tests/resources/*.png filter=lfs diff=lfs merge=lfs -text
+tests/resources/*.dcm filter=lfs diff=lfs merge=lfs -text
